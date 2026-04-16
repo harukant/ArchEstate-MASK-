@@ -1,0 +1,104 @@
+/* ESTILOS ESPECÍFICOS: FORMULARIO USUARIO */
+#userForm input::placeholder {
+    color: rgba(0, 4, 16, 0.3);
+}
+
+#userForm select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23735A3A'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+}
+
+#budget-popup .budget-range-slider {
+    pointer-events: auto;
+}
+
+#budget-popup input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 1rem;
+    background: transparent;
+    position: relative;
+    z-index: 2;
+    margin: 0;
+}
+
+#budget-popup input[type=range]::-webkit-slider-runnable-track {
+    height: 0.5rem;
+    background: transparent;
+}
+
+#budget-popup input[type=range]::-moz-range-track {
+    height: 0.5rem;
+    background: transparent;
+}
+
+#budget-popup input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 9999px;
+    background: #f5c347;
+    border: 4px solid #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    cursor: pointer;
+    margin-top: -12px;
+}
+
+#budget-popup input[type=range]::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 9999px;
+    background: #f5c347;
+    border: 4px solid #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    cursor: pointer;
+}
+
+#budget-popup label {
+    text-align: center;
+}
+
+#budget-popup #budget-popup-close {
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    width: 40px;
+    height: 40px;
+}
+
+#budget-popup #budget-popup-trigger {
+    text-align: center;
+}
+
+#budget-popup input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 9999px;
+    background: #f5c347;
+    border: 4px solid #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    cursor: pointer;
+}
+
+#budget-popup input[type=range]::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 9999px;
+    background: #f5c347;
+    border: 4px solid #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    cursor: pointer;
+}
+
+#zone-suggestions li {
+    transition: background-color 0.2s ease;
+}
+
+#zone-suggestions li:hover {
+    background-color: rgba(245, 211, 101, 0.12);
+}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Lead | ArchEstate{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto w-full space-y-6">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white rounded-lg shadow-xl p-6 border border-midnight/10">
+        <div>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-gold font-bold">Lead #{{ lead.id }}</p>
+            <h1 class="text-3xl font-serif text-midnight mt-2">Detalles de la Solicitud</h1>
+            <p class="text-sm text-midnight/60 mt-2">Toda la información enviada por el cliente se muestra a continuación.</p>
+        </div>
+        <a href="{{ url_for('professional_view') }}" class="inline-flex items-center gap-2 rounded bg-midnight px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-gold hover:text-midnight transition-all">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Volver al panel
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-3xl border border-midnight/10 shadow-xl p-6 space-y-5">
+            <div>
+                <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Tipo de Propiedad</p>
+                <p class="text-base font-semibold text-midnight">{{ lead.property_type|capitalize }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Tipo de Operación</p>
+                <p class="text-base font-semibold text-midnight">{{ lead.type }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Zona de Interés</p>
+                <p class="text-base text-midnight">{{ lead.zone }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Presupuesto</p>
+                <p class="text-base text-midnight">{{ lead.budget }} {% if lead.currency %}({{ lead.currency }}){% endif %}</p>
+            </div>
+            <div>
+                <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Contacto</p>
+                <p class="text-sm text-midnight">Teléfono: {{ lead.phone }}</p>
+                <p class="text-sm text-midnight">Email: {{ lead.email }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Registrado</p>
+                <p class="text-sm text-midnight">{{ lead.timestamp }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-midnight/10 shadow-xl p-6 space-y-5">
+            <h2 class="text-lg font-serif text-midnight">Detalles específicos</h2>
+            <div class="grid grid-cols-1 gap-4">
+                {% if lead.property_type == 'departamento' %}
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Piso / Bloque</p>
+                    <p class="text-base text-midnight">{{ lead.floor_block or 'No especificado' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Metros útiles</p>
+                    <p class="text-base text-midnight">{{ lead.usable_m2 if lead.usable_m2 else 'No especificado' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Ascensor</p>
+                    <p class="text-base text-midnight">{{ lead.elevator or 'No especificado' }}</p>
+                </div>
+                {% else %}
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Superficie de terreno</p>
+                    <p class="text-base text-midnight">{{ lead.land_area if lead.land_area else 'No especificado' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Superficie construida</p>
+                    <p class="text-base text-midnight">{{ lead.built_area if lead.built_area else 'No especificado' }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">Piscina</p>
+                    <p class="text-base text-midnight">{{ lead.pool or 'No especificado' }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

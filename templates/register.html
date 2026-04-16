@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo Registro | ArchEstate{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-12">
+    <div class="bg-white p-10 rounded-lg shadow-2xl border-t-4 border-gold">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-serif">Solicitar <span class="serif-italic">Acceso</span></h2>
+            <p class="text-[10px] uppercase tracking-widest text-midnight/40 mt-2 font-bold">The Private Ledger</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="bg-rose-50 text-rose-700 text-[10px] uppercase tracking-widest font-bold p-3 mb-6 border border-rose-100 rounded text-center">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('register') }}" method="POST" class="space-y-6">
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest font-bold text-gold mb-2">Tipo de Cuenta</label>
+                <select name="role" required class="w-full bg-paper-dark border-0 border-b border-midnight/10 focus:border-gold focus:ring-0 py-3 transition-all text-sm">
+                    <option value="client">Soy Cliente (Busco construir/comprar)</option>
+                    <option value="professional">Soy Profesional (Arquitecto/Agente)</option>
+                </select>
+            </div>
+            
+            <div id="license-container" class="hidden animate-fade-in">
+                <label class="block text-[10px] uppercase tracking-widest font-bold text-gold mb-2">Número de Matrícula / ID Profesional *</label>
+                <div class="relative">
+                    <i data-lucide="award" class="absolute left-0 bottom-3 text-midnight/30 w-5 h-5"></i>
+                    <input id="license-input" name="license" type="text" placeholder="Ej: COAM-12345" class="w-full bg-transparent border-0 border-b border-midnight/10 focus:border-gold focus:ring-0 py-3 pl-8 transition-all">
+                </div>
+            </div>
+            
+            <script>
+                // Toggle license field based on role selection
+                document.addEventListener('DOMContentLoaded', () => {
+                    const roleSelect = document.querySelector('select[name="role"]');
+                    const licenseContainer = document.getElementById('license-container');
+                    const licenseInput = document.getElementById('license-input');
+                    
+                    roleSelect.addEventListener('change', () => {
+                        if (roleSelect.value === 'professional') {
+                            licenseContainer.classList.remove('hidden');
+                            licenseInput.focus();
+                        } else {
+                            licenseContainer.classList.add('hidden');
+                            licenseInput.value = '';
+                        }
+                    });
+                    
+                    // Trigger change on page load in case professional was pre-selected
+                    roleSelect.dispatchEvent(new Event('change'));
+                });
+            </script>
+
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest font-bold text-gold mb-2">Usuario / Email</label>
+                <div class="relative">
+                    <i data-lucide="user" class="absolute left-0 bottom-3 text-midnight/30 w-5 h-5"></i>
+                    <input name="username" required type="text" class="w-full bg-transparent border-0 border-b border-midnight/10 focus:border-gold focus:ring-0 py-3 pl-8 transition-all">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-[10px] uppercase tracking-widest font-bold text-gold mb-2">Contraseña</label>
+                <div class="relative">
+                    <i data-lucide="lock" class="absolute left-0 bottom-3 text-midnight/30 w-5 h-5"></i>
+                    <input name="password" required type="password" minlength="6" class="w-full bg-transparent border-0 border-b border-midnight/10 focus:border-gold focus:ring-0 py-3 pl-8 transition-all">
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-midnight text-white py-4 rounded font-bold uppercase tracking-widest text-xs hover:bg-gold transition-all mt-8 flex items-center justify-center gap-2 group">
+                Crear Cuenta
+                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </form>
+        
+        <div class="mt-6 text-center">
+            <a href="{{ url_for('login') }}" class="text-[10px] uppercase tracking-widest font-bold text-midnight/40 hover:text-gold transition-colors">
+                ¿Ya tienes cuenta? Iniciar Sesión
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
