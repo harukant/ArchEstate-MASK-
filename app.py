@@ -140,12 +140,12 @@ def init_db():
 def login_required(f):
     """
     Decorador para proteger rutas que requieren autenticación.
-    Si el usuario no está en la sesión, redirige al login.
+    Si el usuario no está en la sesión, redirige al registro.
     """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
-            return redirect(url_for('login'))
+            return redirect(url_for('register'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -157,7 +157,7 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
-            return redirect(url_for('login'))
+            return redirect(url_for('register'))
         
         # Verificar rol en la base de datos
         conn = get_db_connection()
@@ -179,7 +179,7 @@ def professional_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
-            return redirect(url_for('login'))
+            return redirect(url_for('register'))
         
         # Verificar rol en la base de datos
         conn = get_db_connection()
@@ -490,6 +490,23 @@ def submit_lead():
         conn.close()
         return jsonify({"status": "error", "message": "Sesión no válida"}), 401
     
+    # --- VALIDACIÓN DE SUPERFICIES (casa) ---
+    property_type = data.get('property_type', 'departamento')
+    if property_type == 'casa':
+        try:
+            land_area = int(data.get('land_area', 0) or 0)
+            built_area = int(data.get('built_area', 0) or 0)
+        except (ValueError, TypeError):
+            land_area = 0
+            built_area = 0
+        
+        if built_area > 0 and land_area > 0 and built_area > land_area:
+            conn.close()
+            return jsonify({
+                "status": "error",
+                "message": "La superficie construida no puede superar la superficie del terreno."
+            }), 400
+
     # --- GUARDADO EN BASE DE DATOS ---
     try:
         conn.execute('''
@@ -501,7 +518,7 @@ def submit_lead():
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             data.get('type'),
-            data.get('property_type', 'departamento'),
+            property_type,
             data.get('zone'),
             data.get('budget'),
             data.get('currency', 'ARG'),

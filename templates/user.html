@@ -64,12 +64,13 @@
             <div id="house-details" class="hidden space-y-6">
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest font-bold text-gold mb-2">Superficie de terreno</label>
-                    <input name="land_area" type="number" min="20" step="1" placeholder="m²" class="w-full bg-transparent border-0 border-b border-midnight/10 focus:border-gold focus:ring-0 py-3 transition-all">
+                    <input name="land_area" id="land-area-input" type="number" min="20" step="1" placeholder="m²" class="w-full bg-transparent border-0 border-b border-midnight/10 focus:border-gold focus:ring-0 py-3 transition-all">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-[10px] uppercase tracking-widest font-bold text-gold mb-2">Superficie construida</label>
-                        <input name="built_area" type="number" min="20" step="1" placeholder="m²" class="w-full bg-transparent border-0 border-b border-midnight/10 focus:border-gold focus:ring-0 py-3 transition-all">
+                        <input name="built_area" id="built-area-input" type="number" min="20" step="1" placeholder="m²" class="w-full bg-transparent border-0 border-b border-midnight/10 focus:border-gold focus:ring-0 py-3 transition-all">
+                        <p id="built-area-error" class="hidden mt-1 text-xs text-rose-500 font-semibold">La superficie construida no puede superar la del terreno.</p>
                     </div>
                     <div>
                         <label class="block text-[10px] uppercase tracking-widest font-bold text-gold mb-2">Piscina</label>
@@ -202,14 +203,47 @@
 {% block scripts %}
 <script>
 /**
- * Manejo de envío de solicitud para usuarios autenticados
+ *  Manejo de envío de solicitud para usuarios autenticados
+ *  + Validación en tiempo real: superficie construida ≤ superficie terreno
  */
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('userForm');
-    
+    const landAreaInput = document.getElementById('land-area-input');
+    const builtAreaInput = document.getElementById('built-area-input');
+    const builtAreaError = document.getElementById('built-area-error');
+
+    // --- Validación en tiempo real: built_area <= land_area ---
+    function validateAreas() {
+        if (!landAreaInput || !builtAreaInput || !builtAreaError) return true;
+        const propertyType = document.getElementById('property-type-input');
+        if (propertyType && propertyType.value !== 'casa') return true;
+
+        const land = Number(landAreaInput.value) || 0;
+        const built = Number(builtAreaInput.value) || 0;
+
+        if (built > 0 && land > 0 && built > land) {
+            builtAreaError.classList.remove('hidden');
+            builtAreaInput.classList.add('border-rose-400');
+            return false;
+        } else {
+            builtAreaError.classList.add('hidden');
+            builtAreaInput.classList.remove('border-rose-400');
+            return true;
+        }
+    }
+
+    if (landAreaInput) landAreaInput.addEventListener('input', validateAreas);
+    if (builtAreaInput) builtAreaInput.addEventListener('input', validateAreas);
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        // Validar áreas antes de enviar
+        if (!validateAreas()) {
+            showToast('La superficie construida no puede superar la del terreno.', 'error');
+            return;
+        }
+
         // Recolectar datos del formulario
         const formData = new FormData(form);
         const data = Object.fromEntries(formData);

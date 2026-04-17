@@ -56,10 +56,10 @@
                     </a>
                 </div>
             {% else %}
-                {% if request.path != '/login' %}
-                <a href="{{ url_for('login') }}" class="flex items-center gap-2 text-gold-light hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest">
+                {% if request.path != '/login' and request.path != '/register' %}
+                <a href="{{ url_for('register') }}" class="flex items-center gap-2 text-gold-light hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest">
                     <i data-lucide="lock" class="w-3 h-3"></i>
-                    Acceso Privado
+                    Registrarse
                 </a>
                 {% endif %}
             {% endif %}
